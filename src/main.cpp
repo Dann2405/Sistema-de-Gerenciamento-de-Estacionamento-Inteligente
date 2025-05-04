@@ -263,47 +263,49 @@ void saidaVeiculos(FilaSaida &filaSaida)
 {
     if (filaSaida.estaVazio())
     {
-        cout << "\nFila de saída está vazia! Não há veículos para remover.\n";
+        cout << "\nFila de saída está vazia! Nenhum veículo para sair.\n";
         return;
     }
 
-    cout << "\n--- Fila de Saída Atual ---\n";
-    filaSaida.listar();
+    int opcao;
+    cout << "\nDeseja remover o veículo pela:\n";
+    cout << "1. Frente\n";
+    cout << "2. Fundo\n";
+    cout << "Escolha uma opção: ";
+    cin >> opcao;
+    cin.ignore();
 
-    cout << "\nDeseja remover o veículo pela frente ou pelo fundo da fila? (Frente/Fundo): ";
-    getline(cin >> ws, resp);
+    Veiculo v;
 
-    Veiculo veiculoRemovido;
-
-    if (resp == "Frente" || resp == "frente")
+    if (opcao == 1)
     {
-        try
+        v = filaSaida.removerFrente();
+        if (v.get_placa() != "")
         {
-            veiculoRemovido = filaSaida.removerFrente();
             cout << "\nVeículo removido pela frente:\n";
-            veiculoRemovido.print_dados();
+            v.print_dados();
         }
-        catch (const exception &e)
+        else
         {
-            cout << "\nErro: " << e.what() << endl;
+            cout << "\nNenhum veículo foi removido (fila vazia).\n";
         }
     }
-    else if (resp == "Fundo" || resp == "fundo")
+    else if (opcao == 2)
     {
-        try
+        v = filaSaida.removerFundo();
+        if (v.get_placa() != "")
         {
-            veiculoRemovido = filaSaida.removerFundo();
             cout << "\nVeículo removido pelo fundo:\n";
-            veiculoRemovido.print_dados();
+            v.print_dados();
         }
-        catch (const exception &e)
+        else
         {
-            cout << "\nErro: " << e.what() << endl;
+            cout << "\nNenhum veículo foi removido (fila vazia).\n";
         }
     }
     else
     {
-        cout << "\nOpção inválida! Nenhum veículo foi removido.\n";
+        cout << "\nOpção inválida!\n";
     }
 
     cout << "\nPressione Enter para continuar...";
