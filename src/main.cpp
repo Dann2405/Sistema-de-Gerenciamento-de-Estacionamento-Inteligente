@@ -21,6 +21,7 @@ string resp;
 void menu();
 void limparConsole();
 void visualizarHistorico();
+void logEvento(const string &evento);
 void inserirVeiculo(queue<Veiculo> &filaEntrada);
 void visualizarEstacionamento(const queue<Veiculo> &filaEntrada, const ListaEstacionamento &estacionamento, const FilaSaida &filaSaida); // Visualiza o estacionamento
 void moverParaVaga(queue<Veiculo> &filaEntrada, ListaEstacionamento &estacionamento);
@@ -65,6 +66,7 @@ int main()
 
         case 0:
             cout << "\nSaindo do sistema...";
+            logEvento("Sistema encerrado pelo usuario.");
             break;
 
         default:
@@ -258,6 +260,7 @@ void enviarParaFilaSaida(ListaEstacionamento &estacionamento, FilaSaida &filaSai
         filaSaida.inserirPorPrioridade(veiculoParaSaida);
 
         cout << "\nVeiculo com placa: " << placa << "\nremovido da vaga: " << vaga << " e enviado para a fila de saida com sucesso!\n";
+        logEvento("Veiculo enviado para fila de saida: " + veiculoParaSaida.get_placa());
     }
     else
     {
@@ -291,6 +294,7 @@ void saidaVeiculos(FilaSaida &filaSaida)
         {
             cout << "\nVeiculo removido pela frente:\n";
             v.print_dados();
+            logEvento("Veiculo saiu pela frente: " + v.get_placa()); // caso seja a frente
         }
         else
         {
@@ -304,6 +308,7 @@ void saidaVeiculos(FilaSaida &filaSaida)
         {
             cout << "\nVeiculo removido pelo fundo:\n";
             v.print_dados();
+            logEvento("Veiculo saiu pelo fundo: " + v.get_placa()); // caso seja o fundo
         }
         else
         {
