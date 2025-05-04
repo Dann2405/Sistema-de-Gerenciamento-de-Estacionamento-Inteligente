@@ -24,14 +24,12 @@ public:
     {
         cout << "\n--- INSERIR UM NOVO VEICULO ---\n";
         cout << "Qual a placa do veiculo? ";
-        getline(cin >> ws, placa);
-
+        getline(cin>>ws, placa);
         cout << "Informe o tipo de veiculo:\n";
         cout << "1. Comum\n";
-        cout << "2. Prioritário\n";
-        cout << "3. Emergência\n";
-        cout << "4. Serviço\n";
-        cout << "Escolha uma opção: ";
+        cout << "2. Prioritario\n";
+        cout << "3. Emergencia\n";
+        cout << "Escolha uma opcao: ";
 
         int opcao;
         cin >> opcao;
@@ -48,11 +46,8 @@ public:
             case 3:
                 tipo = "Emergencia";
                 break;
-            case 4:
-                tipo = "Servico";
-                break;
             default:
-                cout << "Opçao invalida. Tipo definido como 'Comum'.\n";
+                cout << "Opcao invalida. Tipo definido como 'Comum'.\n";
                 tipo = "Comum";
         }
     }
@@ -67,7 +62,7 @@ public:
     {
         return placa;
     }
-    
+
     string get_tipo() const
     {
         return tipo;
