@@ -263,12 +263,12 @@ void saidaVeiculos(FilaSaida &filaSaida)
 {
     if (filaSaida.estaVazio())
     {
-        cout << "\nFila de saída está vazia! Nenhum veículo para sair.\n";
+        cout << "Fila de saida esta vazia! Nenhum veiculo para sair." << endl;
         return;
     }
 
     int opcao;
-    cout << "\nDeseja remover o veículo pela:\n";
+    cout << "\nDeseja remover o veiculo pela:\n";
     cout << "1. Frente\n";
     cout << "2. Fundo\n";
     cout << "Escolha uma opção: ";
@@ -282,12 +282,12 @@ void saidaVeiculos(FilaSaida &filaSaida)
         v = filaSaida.removerFrente();
         if (v.get_placa() != "")
         {
-            cout << "\nVeículo removido pela frente:\n";
+            cout << "\nVeiculo removido pela frente:\n";
             v.print_dados();
         }
         else
         {
-            cout << "\nNenhum veículo foi removido (fila vazia).\n";
+            cout << "\nNenhum veiculo foi removido (fila vazia).\n";
         }
     }
     else if (opcao == 2)
@@ -295,17 +295,17 @@ void saidaVeiculos(FilaSaida &filaSaida)
         v = filaSaida.removerFundo();
         if (v.get_placa() != "")
         {
-            cout << "\nVeículo removido pelo fundo:\n";
+            cout << "\nVeiculo removido pelo fundo:\n";
             v.print_dados();
         }
         else
         {
-            cout << "\nNenhum veículo foi removido (fila vazia).\n";
+            cout << "\nNenhum veiculo foi removido (fila vazia).\n";
         }
     }
     else
     {
-        cout << "\nOpção inválida!\n";
+        cout << "\nOpçao invalida!\n";
     }
 
     cout << "\nPressione Enter para continuar...";
