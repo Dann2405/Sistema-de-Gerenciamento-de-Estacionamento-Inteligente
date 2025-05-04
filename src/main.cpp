@@ -87,7 +87,7 @@ void menu()
     cout << "\n2. Visualizar o estado atual do estacionamento";
     cout << "\n3. Mover um veiculo da fila para uma vaga";
     cout << "\n4. Enviar um veiculo estacionado para a fila de saida";
-    cout << "\n5. Realizar saida pela frente ou fundo";
+    cout << "\n5. Realizar a saida de veiculo pela frente ou fundo";
     cout << "\n6. Visualizar historico salvo em arquivo";
     cout << "\n0. Exit";
     cout << "\nEscolha uma opcao: ";
