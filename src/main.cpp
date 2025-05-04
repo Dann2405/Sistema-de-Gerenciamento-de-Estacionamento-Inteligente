@@ -3,6 +3,7 @@
 #include <vector>
 #include <deque>
 #include <fstream>
+#include <ctime>
 #include "include/veiculo.h"
 #include "include/fila_saida.h"
 #include "include/ListaEstacionamento.h"
@@ -19,6 +20,7 @@ string resp;
 
 void menu();
 void limparConsole();
+void visualizarHistorico();
 void inserirVeiculo(queue<Veiculo> &filaEntrada);
 void visualizarEstacionamento(const queue<Veiculo> &filaEntrada, const ListaEstacionamento &estacionamento, const FilaSaida &filaSaida); // Visualiza o estacionamento
 void moverParaVaga(queue<Veiculo> &filaEntrada, ListaEstacionamento &estacionamento);
@@ -58,7 +60,7 @@ int main()
             saidaVeiculos(filaSaida); // chama a funcao de realizar saida pela frente ou fundo
             break;
         case 6:
-            /* chamar a funcao de Visualizar historico salvo em arquivo */
+            visualizarHistorico(); // chama a funcao de Visualizar historico salvo em arquivo .txt
             break;
 
         case 0:
@@ -105,6 +107,9 @@ void inserirVeiculo(queue<Veiculo> &filaEntrada)
         getline(cin >> ws, resp);
 
     } while (resp == "Sim" or resp == "sim" or resp == "SIM" or resp == "S" or resp == "s");
+
+    logEvento("Veiculo inserido na fila de entrada: " + novoVeiculo.get_placa());
+
 }
 void visualizarEstacionamento(const queue<Veiculo> &filaEntrada, const ListaEstacionamento &estacionamento, const FilaSaida &filaSaida)
 {
@@ -205,6 +210,7 @@ void moverParaVaga(queue<Veiculo> &filaEntrada, ListaEstacionamento &estacioname
         filaEntrada.pop(); // Remove da fila de entrada
 
         cout << "\nVeiculo estacionado com sucesso na vaga " << proximaVaga << "!\n";
+        logEvento("Veiculo estacionado na vaga " + to_string(proximaVaga) + ": " + proximo.get_placa());
     }
     else
     {
@@ -259,6 +265,7 @@ void enviarParaFilaSaida(ListaEstacionamento &estacionamento, FilaSaida &filaSai
     }
 }
 
+// Realiza a saida de veiculos pela frente ou fundo
 void saidaVeiculos(FilaSaida &filaSaida)
 {
     if (filaSaida.estaVazio())
@@ -308,6 +315,49 @@ void saidaVeiculos(FilaSaida &filaSaida)
         cout << "\nOpçao invalida!\n";
     }
 
+    cout << "\nPressione Enter para continuar...";
+    cin.get();
+}
+
+// Função para registrar eventos no arquivo de log
+void logEvento(const string &evento)
+{
+    ofstream logFile("log.txt", ios::app); // Abre o arquivo em modo de anexar
+
+    if (logFile.is_open())
+    {
+        time_t now = time(0);                  // Hora atual
+        string dt = ctime(&now);               // Converte para string formatada
+        dt.pop_back();                         // Remove o '\n' do final
+
+        logFile << "[" << dt << "] " << evento << endl;
+
+        logFile.close();
+    }
+    else
+    {
+        cout << "Erro ao abrir o arquivo de log!" << endl;
+    }
+}
+
+// Função para vizualizar o histórico
+void visualizarHistorico()
+{
+    ifstream logFile("log.txt");
+
+    if (!logFile)
+    {
+        cout << "\nErro ao abrir o arquivo de log!\n";
+        return;
+    }
+
+    string linha;
+    while (getline(logFile, linha))
+    {
+        cout << linha << endl;
+    }
+
+    logFile.close();
     cout << "\nPressione Enter para continuar...";
     cin.get();
 }
