@@ -23,6 +23,7 @@ void inserirVeiculo(queue<Veiculo> &filaEntrada);
 void visualizarEstacionamento(const queue<Veiculo> &filaEntrada, const ListaEstacionamento &estacionamento, const FilaSaida &filaSaida); // Visualiza o estacionamento
 void moverParaVaga(queue<Veiculo> &filaEntrada, ListaEstacionamento &estacionamento);
 void enviarParaFilaSaida(ListaEstacionamento &estacionamento, FilaSaida &filaSaida);
+void saidaVeiculos(FilaSaida &filaSaida);
 
 int main()
 {
@@ -54,7 +55,7 @@ int main()
             enviarParaFilaSaida(estacionamento, filaSaida);
             break;
         case 5:
-            /* chamar a funcao de Realizar saida pela frente ou fundo */
+            saidaVeiculos(filaSaida); // chama a funcao de realizar saida pela frente ou fundo
             break;
         case 6:
             /* chamar a funcao de Visualizar historico salvo em arquivo */
@@ -256,4 +257,55 @@ void enviarParaFilaSaida(ListaEstacionamento &estacionamento, FilaSaida &filaSai
     {
         cout << "\nFalha ao remover o veiculo do estacionamento\n" ;
     }
+}
+
+void saidaVeiculos(FilaSaida &filaSaida)
+{
+    if (filaSaida.estaVazio())
+    {
+        cout << "\nFila de saída está vazia! Não há veículos para remover.\n";
+        return;
+    }
+
+    cout << "\n--- Fila de Saída Atual ---\n";
+    filaSaida.listar();
+
+    cout << "\nDeseja remover o veículo pela frente ou pelo fundo da fila? (Frente/Fundo): ";
+    getline(cin >> ws, resp);
+
+    Veiculo veiculoRemovido;
+
+    if (resp == "Frente" || resp == "frente")
+    {
+        try
+        {
+            veiculoRemovido = filaSaida.removerFrente();
+            cout << "\nVeículo removido pela frente:\n";
+            veiculoRemovido.print_dados();
+        }
+        catch (const exception &e)
+        {
+            cout << "\nErro: " << e.what() << endl;
+        }
+    }
+    else if (resp == "Fundo" || resp == "fundo")
+    {
+        try
+        {
+            veiculoRemovido = filaSaida.removerFundo();
+            cout << "\nVeículo removido pelo fundo:\n";
+            veiculoRemovido.print_dados();
+        }
+        catch (const exception &e)
+        {
+            cout << "\nErro: " << e.what() << endl;
+        }
+    }
+    else
+    {
+        cout << "\nOpção inválida! Nenhum veículo foi removido.\n";
+    }
+
+    cout << "\nPressione Enter para continuar...";
+    cin.get();
 }

@@ -107,6 +107,28 @@ public:
             fila.push_back(veiculo); // Veículos comuns vão ao fim
         }
     }
+    
+    bool estaVazio() const {
+        return fila.empty();
+    }
+
+    Veiculo removerFrente() {
+        if (!fila.empty()) {
+            Veiculo v = fila.front();
+            fila.pop_front();
+            return v;
+        }
+        return Veiculo(); // retorna veículo "vazio"
+    }
+
+    Veiculo removerFundo() {
+        if (!fila.empty()) {
+            Veiculo v = fila.back();
+            fila.pop_back();
+            return v;
+        }
+        return Veiculo(); // retorna veículo "vazio"
+    }
 };
 
 #endif // FILASAIDA_H
