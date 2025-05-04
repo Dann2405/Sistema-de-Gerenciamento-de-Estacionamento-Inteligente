@@ -4,6 +4,8 @@
 #include <deque>
 #include <fstream>
 #include "include/veiculo.h"
+#include "include/fila_saida.h"
+#include "include/ListaEstacionamento.h"
 
 using namespace std;
 
@@ -18,19 +20,24 @@ string resp;
 void menu();
 void limparConsole();
 void inserirVeiculo(queue<Veiculo> &filaEntrada);
+void visualizarEstacionamento(const queue<Veiculo> &filaEntrada, const ListaEstacionamento &estacionamento, const FilaSaida &filaSaida); // Visualiza o estacionamento
+void moverParaVaga(queue<Veiculo> &filaEntrada, ListaEstacionamento &estacionamento);
+void enviarParaFilaSaida(ListaEstacionamento &estacionamento, FilaSaida &filaSaida);
 
 int main()
 {
     int op;
-    queue<Veiculo> filaEntrada;
+    queue<Veiculo> filaEntrada;            // Fila de entrada de veiculos
+    ListaEstacionamento estacionamento(5); // Estacionamento com capacidade para 5 veiculos
+    FilaSaida filaSaida;
 
     do
     {
-    menu(); // chama a função menu para exibir as opções
-    cin >> op; // ler a opção escolhida pelo usuário
-    cin.ignore(); // limpa o buffer de entrada
+        menu();       // chama a função menu para exibir as opções
+        cin >> op;    // ler a opção escolhida pelo usuário
+        cin.ignore(); // limpa o buffer de entrada
 
-    limparConsole(); // limpa o console para uma melhor visualização
+        limparConsole(); // limpa o console para uma melhor visualização
 
         switch (op)
         {
@@ -38,13 +45,13 @@ int main()
             inserirVeiculo(filaEntrada); // chama a função para inserir um veiculo na fila de entrada
             break;
         case 2:
-            /* chamar a funcao de Visualizar o estado atual do estacionamento */
+            visualizarEstacionamento(filaEntrada, estacionamento, filaSaida); // chama a função para visualizar o estacionamento
             break;
         case 3:
-            /* chamar a funcao de Mover um veiculo da fila para uma vaga */
+            moverParaVaga(filaEntrada, estacionamento);
             break;
         case 4:
-            /* chamar a funcao de Enviar um veiculo estacionado para a fila de saida */
+            enviarParaFilaSaida(estacionamento, filaSaida);
             break;
         case 5:
             /* chamar a funcao de Realizar saida pela frente ou fundo */
@@ -65,7 +72,8 @@ int main()
     } while (op != 0);
 }
 
-void limparConsole() {
+void limparConsole()
+{
     system(CLEAR_COMMAND);
 }
 
@@ -89,11 +97,163 @@ void inserirVeiculo(queue<Veiculo> &filaEntrada)
     Veiculo novoVeiculo; // Novo veiculo a ser inserido
     do
     {
-        novoVeiculo.set_dados(); // Chama a função para definir os dados do veiculo
+        novoVeiculo.set_dados();       // Chama a função para definir os dados do veiculo
         filaEntrada.push(novoVeiculo); // Adiciona o veiculo a fila de entrada
         cout << "\nVeiculo inserido na fila de entrada com sucesso!";
         cout << "\nDeseja inserir outro veiculo? (Sim/Nao): ";
-        getline(cin>>ws, resp);
+        getline(cin >> ws, resp);
 
     } while (resp == "Sim" or resp == "sim" or resp == "SIM" or resp == "S" or resp == "s");
+}
+void visualizarEstacionamento(const queue<Veiculo> &filaEntrada, const ListaEstacionamento &estacionamento, const FilaSaida &filaSaida)
+{
+    cout << "\n================================================================";
+    cout << "\n\tEstado Atual do Estacionamento";
+    cout << "\n================================================================\n";
+
+    // Mostrar fila de entrada
+    cout << "\n--- Fila de Entrada ---\n";
+    if (filaEntrada.empty())
+    {
+        cout << "Fila de entrada vazia!\n";
+    }
+    else
+    {
+        queue<Veiculo> filaCopia = filaEntrada; // Criado uma copia para nao alterar a original
+        int contador = 1; // Contador para numerar os veiculos na fila
+
+        while (!filaCopia.empty())
+        {
+            cout << contador << ". ";
+            filaCopia.front().print_dados();
+            filaCopia.pop();
+            contador++;
+        }
+    }
+
+    // Mostrar estacionamento
+    cout << "\n--- Vagas Ocupadas ---\n";
+    estacionamento.listar();
+
+    // Mostrar fila de saida
+    cout << "\n--- Fila de Saida ---\n";
+    filaSaida.listar();
+
+    cout << "\nPressione Enter para continuar...";
+    cin.get();
+}
+
+void moverParaVaga(queue<Veiculo> &filaEntrada, ListaEstacionamento &estacionamento)
+{
+    if (filaEntrada.empty())
+    {
+        cout << "\nFila de entrada vazia! Nao tem veiculos para estacionar\n";
+        return;
+    }
+
+    if (estacionamento.estaCheio())
+    {
+        cout << "\nEstacionamento cheio! Nao tem vagas disponiveis\n";
+        return;
+    }
+
+    // Mostrar proximo veiculo na fila de entrada
+    Veiculo proximo = filaEntrada.front();
+    cout << "\nProximo veiculo na fila de entrada: \n";
+    proximo.print_dados();
+
+    // Encontrar proxima vaga livre
+    int proximaVaga = estacionamento.proximaVagaLivre();
+
+    if (proximaVaga == -1)
+    {
+        cout << "\nErro ao encontrar vaga disponivel!\n";
+        return;
+    }
+
+    cout << "\nVaga sugerida: " << proximaVaga << "\n";
+
+    // Perguntar se deseja escolher outra vaga
+    cout << "\nDeseja escolher outra vaga? (Sim/Nao): ";
+    getline(cin >> ws, resp);
+
+    if (resp == "Sim" or resp == "sim" or resp == "SIM" or resp == "S" or resp == "s")
+    {
+        int vagaEscolhida;
+        cout << "\nDigite o numero da vaga desejada (1-" << 5 << "): "; // Limite de 5 vagas (pode ser alterado)
+        cin >> vagaEscolhida;
+        cin.ignore();
+
+        if (estacionamento.vagaOcupada(vagaEscolhida))
+        {
+            cout << "\nVaga " << vagaEscolhida << " ja esta ocupada! Usando vaga sugerida " << proximaVaga << " em vez disso\n";
+        }
+        else if (vagaEscolhida < 1 or vagaEscolhida > 5) // Limite de 5 vagas (pode ser alterado)
+        {
+            cout << "\nVaga invalida! Usando vaga sugerida " << proximaVaga << " em vez disso\n";
+        }
+        else
+        {
+            proximaVaga = vagaEscolhida;
+        }
+    }
+
+    // Estacionar o veiculo
+    if (estacionamento.inserir(proximo, proximaVaga))
+    {
+        filaEntrada.pop(); // Remove da fila de entrada
+
+        cout << "\nVeiculo estacionado com sucesso na vaga " << proximaVaga << "!\n";
+    }
+    else
+    {
+        cout << "\nFalha ao estacionar o veiculo. Tente novamente.\n";
+    }
+
+    cout << "\nPressione Enter para continuar...";
+    cin.get();
+}
+
+void enviarParaFilaSaida(ListaEstacionamento &estacionamento, FilaSaida &filaSaida)
+{
+    if (estacionamento.estaVazio()) // Verifica se o estacionamento esta vazio
+    {
+        cout << "\nEstacionamento vazio! Nao ha veiculos para enviar a fila de saida\n";
+        return;
+    }
+
+    // Listar veiculos estacionados
+    cout << "\n--- Veiculos Estacionados ---\n";
+    estacionamento.listar();
+
+    // Solicitar placa do veiculo a ser movido
+    string placa;
+    cout << "\nDigite a placa do veiculo que deseja enviar para a fila de saida: ";
+    getline(cin, placa);
+
+    // Busca o veiculo
+    Veiculo *veiculo = estacionamento.buscarVeiculo(placa);
+
+    if (veiculo == nullptr) // Se o veiculo nao for encontrado
+    {
+        cout << "\nVeiculo com placa " << placa << " nao encontrado no estacionamento!\n";
+        return;
+    }
+
+    // Criar uma copia do veiculo antes de remove-lo
+    Veiculo veiculoParaSaida = *veiculo;
+    int vaga = estacionamento.buscarVaga(placa); // Busca a vaga do veiculo
+
+    // Remover do estacionamento
+    if (estacionamento.remover(placa)) // Se o veiculo for removido com sucesso
+    {
+        // Adicionar a fila de saida por prioridade
+        filaSaida.inserirPorPrioridade(veiculoParaSaida);
+
+        cout << "\nVeiculo com placa: " << placa << "\nremovido da vaga: " << vaga << " e enviado para a fila de saida com sucesso!\n";
+    }
+    else
+    {
+        cout << "\nFalha ao remover o veiculo do estacionamento\n" ;
+    }
 }
