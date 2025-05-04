@@ -281,7 +281,7 @@ void saidaVeiculos(FilaSaida &filaSaida)
     cout << "\nDeseja remover o veiculo pela:\n";
     cout << "1. Frente\n";
     cout << "2. Fundo\n";
-    cout << "Escolha uma opção: ";
+    cout << "Escolha uma opcao: ";
     cin >> opcao;
     cin.ignore();
 
