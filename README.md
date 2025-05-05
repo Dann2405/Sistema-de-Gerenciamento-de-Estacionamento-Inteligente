@@ -23,7 +23,7 @@ Projeto desenvolvido como trabalho para a disciplina de Estrutura de Dados, util
 Para compilar o projeto, abra o terminal no diretório onde se encontra o arquivo fonte (`main.cpp`) e execute o comando:
 
 ```bash
-g++ -o estacionamento main.cpp
+g++ -o estacionamento .\src\main.cpp
 ```
 
 ## Execução
