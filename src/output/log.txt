@@ -1,8 +1,0 @@
-[Sun May 04 20:20:38 2025] Veiculo inserido na fila de entrada: 3
-[Sun May 04 20:21:01 2025] Veiculo estacionado na vaga 1: 1
-[Sun May 04 20:21:13 2025] Veiculo estacionado na vaga 5: 2
-[Sun May 04 20:21:26 2025] Veiculo estacionado na vaga 3: 3
-[Sun May 04 20:21:34 2025] Veiculo enviado para fila de saida: 2
-[Sun May 04 20:22:05 2025] Veiculo enviado para fila de saida: 3
-[Sun May 04 20:22:27 2025] Veiculo saiu pela frente: 3
-[Sun May 04 20:23:17 2025] Sistema encerrado pelo usuario.
