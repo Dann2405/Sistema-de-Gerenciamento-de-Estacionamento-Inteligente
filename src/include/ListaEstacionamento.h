@@ -161,7 +161,7 @@ public:
 
     int proximaVagaLivre() const
     {
-        bool *vagasOcupadas = new bool[capacidadeTotal + 1](); // Vetor de booleanos para verificar as vagas ocupadas
+        bool *vagasOcupadas = new bool[static_cast<std::size_t>(capacidadeTotal + 1)]();  // Vetor de booleanos para verificar as vagas ocupadas
 
         NoEstacionamento *atual = inicio; // Ponteiro para o nó atual
         while (atual != nullptr) // Percorre a lista de veiculos
@@ -214,7 +214,7 @@ public:
             atual = atual->proximo; // Move para o proximo nó
         }
 
-        cout << "\nTotal de veiculos estacionados: " << qtdVeiculos << " de " << capacidadeTotal << "vagas\n"; // Imprime a quantidade de veiculos
+        cout << "\nTotal de veiculos estacionados: " << qtdVeiculos << " de " << capacidadeTotal << " vagas\n"; // Imprime a quantidade de veiculos
     }
 
     bool vagaOcupada(int vaga) const // Verifica se uma vaga especifica esta ocupada

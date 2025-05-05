@@ -55,10 +55,11 @@ public:
         return fila.empty();
     }
 
-    int tamanho() const // Retorna o tamanho da fila
+    size_t tamanho() const
     {
-        return fila.size();
+    return fila.size();
     }
+
 
     void listar() const // Imprime os veiculos da fila
     {
